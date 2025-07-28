@@ -2,8 +2,8 @@
     "servers": {
       "langchain-mcp":{
           "type": "stdio",
-          "command": "${workspaceFolder}\\.virtualenv\\Scripts\\python.exe",
-          "args": ["${workspaceFolder}\\mcp_server\\server.py"]
+          "command": "${workspaceFolder}/.virtualenv/bin/python",
+          "args": ["${workspaceFolder}/mcp_server/server.py"]
       }
     }
 }
