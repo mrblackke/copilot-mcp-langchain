@@ -1,4 +1,4 @@
-enabled: true
+enabled: false
 description: "LangChain-based RAG tools for vector search and document retrieval"
 dependencies:
   - "faiss-cpu"
