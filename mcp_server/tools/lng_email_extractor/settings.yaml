@@ -1,0 +1,8 @@
+enabled: true
+description: "Email extraction tool for retrieving unread emails from mailboxes and saving them as JSON files"
+dependencies:
+  - imaplib
+  - email
+  - json
+  - datetime
+  - python-dotenv

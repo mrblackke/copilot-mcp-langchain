@@ -1,0 +1,5 @@
+enabled: true
+description: "PDF image extraction tool for extracting and saving images from PDF files"
+dependencies:
+  - PyMuPDF
+  - Pillow
