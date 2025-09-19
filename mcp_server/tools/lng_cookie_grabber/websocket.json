@@ -1,0 +1,51 @@
+{
+  "operation": "server_start",
+  "name": "cookie-websocket-server",
+  "port": 9001,
+  "path": "/ws",
+  "bind_host": "127.0.0.1",
+  "protocol": "ws",
+  "max_connections": 100,
+  "connection_handling": {
+    "heartbeat_enabled": true,
+    "heartbeat_interval": 30,
+    "heartbeat_message": {
+      "type": "ping",
+      "message": "Ping",
+      "version": "Version: 5"
+    },
+    "auto_cleanup": true
+  },
+  "event_handlers": {
+    "on_connect": [
+      {
+        "tool": "lng_file_write",
+        "params": {
+          "file_path": "mcp_server/logs/websocket/cookie-websocket-server.log",
+          "content": "[{! new Date().toISOString() !}] CONNECT: Client {! websocket.client_id !} connected from {! websocket.remote_ip !}\n",
+          "mode": "append"
+        }
+      }
+    ],
+    "on_message": [
+      {
+        "tool": "lng_cookie_grabber",
+        "params": {
+          "operation": "store_encrypted",
+          "encrypted_data": "{! JSON.stringify(websocket.message) !}",
+          "session": "{! websocket.query_params.sessionId !}"
+        }
+      }
+    ],
+    "on_disconnect": [
+      {
+        "tool": "lng_file_write",
+        "params": {
+          "file_path": "mcp_server/logs/websocket/cookie-websocket-server.log",
+          "content": "[{! new Date().toISOString() !}] DISCONNECT: Client {! websocket.client_id !} disconnected\n",
+          "mode": "append"
+        }
+      }
+    ]
+  }
+}

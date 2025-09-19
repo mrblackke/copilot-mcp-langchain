@@ -1,2 +1,4 @@
-- If you suggest any `pip install xxxxx` add this library to the `install.sh` also with a short description in the comment about tool which used this library.
-  + Please do not ask about this, just add it.
+- If you suggest any `pip install xxxxx` add this library to the `install.sh` and `install.ps1` with a short description in the comment about tool which used this library.
+- But if dependency is described in `settings.yaml` please use `python -m mcp_server.run install_dependencies` to install it.
+- You can also install dependencies for specific tools only: `python -m mcp_server.run install_dependencies lng_email_client lng_http_client`
+- Please do not ask about this, just add it.

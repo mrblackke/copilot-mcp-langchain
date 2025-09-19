@@ -1,0 +1,5 @@
+enabled: true
+description: "Universal webhook server constructor with pipeline integration"
+dependencies: 
+  - aiohttp
+  - ssl

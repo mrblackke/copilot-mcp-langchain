@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Cookies Fetcher",
+  "version": "1.0",
+  "permissions": [
+    "tabs", "storage", "activeTab", "cookies", "clipboardWrite"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.epam.com/*", "http://localhost:9000/cookies/*"],
+      "js": ["background.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "host_permissions": [
+    "*://*.epam.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "fetch-all": {
+      "suggested_key": "Ctrl+Shift+1",
+      "description": "Fetch Cookies for All URL sequentially"
+    }
+  }
+}

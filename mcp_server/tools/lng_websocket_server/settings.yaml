@@ -1,0 +1,6 @@
+enabled: true
+description: "Universal WebSocket server and client with event-driven pipelines, SSL support, authentication, and real-time communication"
+dependencies:
+  - "websockets"
+  - "aiohttp"
+  - "ssl"

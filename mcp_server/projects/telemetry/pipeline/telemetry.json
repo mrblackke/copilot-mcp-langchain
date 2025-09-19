@@ -1,0 +1,128 @@
+{
+  "user_params": {
+    "base_directory": "mcp_server/projects/telemetry/data"
+  },
+  "pipeline": [
+    {
+      "tool": "lng_javascript_execute",
+      "params": {
+        "function_name": "mcp_server/projects/telemetry/javascript/setOrderMap"
+      },
+      "output": "order_map"
+    },
+    {
+      "tool": "lng_file_list",
+      "params": {
+        "patterns": ["*.json"],
+        "base_path": "{! user.base_directory !}",
+        "include_directories": false,
+        "include_files": true,
+        "path_type": "absolute",
+        "output_format": "json"
+      },
+      "output": "telemetry_files",
+      "output_log": "file_list_debug"
+    },
+    {
+      "type": "forEach",
+      "forEach": "{! telemetry_files.items !}",
+      "item": "current_file",
+      "output": "file_content",
+      "item_output": "{! file_data !}",
+      "do": [
+        {
+          "tool": "lng_file_read",
+          "params": {
+            "file_path": "{! current_file.absolute_path !}",
+            "output_format": "plain_text"
+          },
+          "output": "file_data"
+        }
+      ]
+    },
+    {
+      "tool": "lng_javascript_execute",
+      "params": {
+        "function_name": "mcp_server/projects/telemetry/javascript/mergeJsons",
+        "parameters": {
+          "json_arrays": "{! file_content !}"
+        }
+      },
+      "output": "merged_data",
+      "output_log": "after_merge"
+    },
+    {
+      "tool": "lng_javascript_execute",
+      "params": {
+        "function_name": "mcp_server/projects/telemetry/javascript/appendFieldsDescription",
+        "parameters": {
+          "data": "{! merged_data !}"
+        }
+      },
+      "output": "data_with_descriptions",
+      "output_log": "with_descriptions"
+    },
+    {
+      "tool": "lng_javascript_execute",
+      "params": {
+        "function_name": "mcp_server/projects/telemetry/javascript/prettyPrintAndSort",
+        "parameters": {
+          "data": "{! data_with_descriptions !}",
+          "orderMap": "{! order_map !}"
+        }
+      },
+      "output": "sorted_data",
+      "output_log": "pretty_printed"
+    },
+    {
+      "tool": "lng_json_to_csv",
+      "params": {
+        "json_data": "{! sorted_data !}",
+        "format": "csv"
+      },
+      "output": "csv_content",
+      "output_log": "final_csv"
+    },
+    {
+      "tool": "lng_file_write",
+      "params": {
+        "file_path": "{! user.base_directory !}/out/telemetry.csv",
+        "content": "{! csv_content !}",
+        "mode": "overwrite"
+      },
+      "output": "csv_file_saved"
+    },
+    {
+      "tool": "lng_xls_batch",
+      "params": {
+        "workspace": {
+          "csv_source": "{! user.base_directory !}/out/telemetry.csv"          
+        },
+        "analyze": true,
+        "operations": []
+      },
+      "output": "file_analysis"
+    },
+    {
+      "tool": "lng_xls_batch",
+      "params": {
+        "workspace": {
+          "csv_source": "{! user.base_directory !}/out/telemetry.csv",
+          "template": "mcp_server/projects/telemetry/template/telemetry.xlsx",
+          "result": "{! user.base_directory !}/out/telemetry.xlsx"
+        },
+        "operations": [
+          {
+            "from": "[csv_source]A7:AP[! file_analysis['analysis']['csv_source']['sheets']['Sheet1']['max_row'] !]",
+            "to": "[template]Sheet1!A11",
+            "save_as": "result",
+            "copy": ["values"],
+            "insert": "replace"
+          }
+        ]
+      },
+      "output": "excel_result"
+    }
+  ],
+  "final_result": "✅ Telemetry processing complete! Files saved:\n📄 CSV Report: {! csv_file_saved.metadata.file_path !}\n📊 Excel Report: {! excel_result.files_saved.saved_files[0] !}"
+}

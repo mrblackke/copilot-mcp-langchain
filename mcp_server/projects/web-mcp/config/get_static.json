@@ -1,0 +1,34 @@
+{
+  "name": "web-mcp-interface",
+  "port": 8080,
+  "bind_host": "localhost",
+  "thread_mode": true,
+  "html_routes": [
+    {
+      "pattern": "/",
+      "template": "mcp_server/projects/web-mcp/static/index.html",
+      "mapping": {
+        "TITLE": "MCP Tools Web Interface",
+        "VERSION": "1.0.0",
+        "BASE_URL": "http://localhost:8080",
+        "EXECUTION_API": "{! 'http://' + webhook.bind_host + ':' + (webhook.port + 1) + '/execute' !}"
+      }
+    },
+    {
+      "pattern": "/api/tools",
+      "template": "mcp_server/projects/web-mcp/static/api_tools.json",
+      "mapping": {
+        "METHOD": "{! webhook.method !}",
+        "TOOLS_DATA": "[! json.dumps(tools_result) if tools_result else '{}' !]",
+        "TIMESTAMP": "{! new Date().toISOString() !}"
+      },
+      "pipeline": [
+        {
+          "tool": "lng_get_tools_info",
+          "params": {"format": "json"},
+          "output": "tools_result"
+        }
+      ]
+    }
+  ]
+}

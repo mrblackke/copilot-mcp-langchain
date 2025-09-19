@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 30px;
+        }
+        .version {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .card {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .card h3 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .tools-section {
+            margin-top: 30px;
+        }
+        .tools-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .tool-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .tool-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: #1976D2;
+        }
+        .tool-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .tool-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+        .tool-name {
+            font-weight: bold;
+            color: #1976D2;
+            font-size: 1.1em;
+            margin: 0;
+        }
+        .tool-category {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            white-space: nowrap;
+        }
+        .tool-description {
+            color: #666;
+            font-size: 0.9em;
+            flex: 1;
+            margin: 0 15px;
+        }
+        .tool-parameters {
+            font-size: 0.8em;
+            color: #888;
+            white-space: nowrap;
+        }
+        .parameters-count {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .tool-details {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+            margin: 20px -20px -20px -20px;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+        }
+        .tool-details.show {
+            display: block;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Search and Filter Styles */
+        .search-filter-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .search-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 16px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background: white;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #1976D2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        .clear-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .clear-button:hover {
+            background: #5a6268;
+        }
+        .filter-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .filter-label {
+            font-weight: 600;
+            color: #495057;
+            margin-right: 5px;
+        }
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .filter-tag {
+            background: #e9ecef;
+            color: #495057;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .filter-tag:hover {
+            background: #dee2e6;
+        }
+        .filter-tag.active {
+            background: #1976D2;
+            color: white;
+        }
+        .clear-filters-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .clear-filters-btn:hover {
+            background: #c82333;
+        }
+        .results-summary {
+            margin: 15px 0;
+            padding: 10px 15px;
+            background: #e8f4fd;
+            border-radius: 6px;
+            border-left: 4px solid #1976D2;
+            color: #1976D2;
+            font-weight: 500;
+        }
+        .tool-card.hidden {
+            display: none;
+        }
+        .search-highlight {
+            background: #ffeb3b;
+            font-weight: bold;
+            padding: 1px 2px;
+            border-radius: 2px;
+        }
+        
+        /* Tool execution styles */
+        .execute-section {
+            margin-top: 0;
+        }
+        .execute-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .execute-button {
+            padding: 12px 24px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .execute-button:hover {
+            background: #219a52;
+        }
+        .execute-button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        .result-section {
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result-header {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .result-content {
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+            border-top: none;
+        }
+        .result-code {
+            padding: 16px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: #fff;
+            color: #333;
+            text-align: left;
+            overflow-x: auto;
+            border-radius: 0;
+            tab-size: 2;
+        }
+        .result-code.json-formatted {
+            background: #f8f9fa;
+            border-left: 3px solid #28a745;
+        }
+        .result-code.text-content {
+            background: #fff;
+            border-left: 3px solid #6c757d;
+            font-family: system-ui, -apple-system, sans-serif;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        .copy-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .copy-button:hover {
+            background: #218838;
+        }
+        .copy-button:active {
+            background: #1e7e34;
+        }
+        .result-success .result-header {
+            background: #d4edda;
+            color: #155724;
+            border-bottom-color: #c3e6cb;
+        }
+        .result-error .result-header {
+            background: #f8d7da;
+            color: #721c24;
+            border-bottom-color: #f5c6cb;
+        }
+        .parameters-section {
+            margin-top: 0;
+        }
+        .parameter-field {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #dee2e6;
+        }
+        .parameter-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .parameter-name {
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+        .parameter-type {
+            background: #e9ecef;
+            color: #6c757d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 500;
+        }
+        .parameter-required {
+            color: #d32f2f;
+            font-size: 0.8em;
+            font-weight: 500;
+            background: #ffebee;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .parameter-optional {
+            color: #388e3c;
+            font-size: 0.8em;
+            font-weight: 500;
+            background: #e8f5e8;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .parameter-description {
+            color: #666;
+            font-size: 0.85em;
+            margin: 4px 0 8px 0;
+            line-height: 1.3;
+        }
+        .parameter-field input,
+        .parameter-field textarea {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            background: #fff;
+            box-sizing: border-box;
+        }
+        .parameter-field input:focus,
+        .parameter-field textarea:focus {
+            outline: none;
+            border-color: #1976D2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        .execute-button-container {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .execute-button {
+            order: 2;
+            margin-left: auto;
+        }
+        
+        .validation-checkbox-inline {
+            order: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.85em;
+            position: relative;
+        }
+        .parameter-item {
+            margin: 8px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 0.9em;
+            border-left: 3px solid #dee2e6;
+        }
+        .parameter-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .parameter-required {
+            color: #d32f2f;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .parameter-optional {
+            color: #388e3c;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .parameter-description {
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 4px;
+        }
+
+        /* Phase 7: Enhanced Form Generation Styles */
+        .parameter-field.parameter-error {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .parameter-type {
+            background: #007bff;
+            color: white;
+        }
+        
+        .parameter-enum {
+            background: #28a745;
+            color: white;
+            font-size: 0.75em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .parameter-field select {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            background: #fff;
+            box-sizing: border-box;
+        }
+        
+        .parameter-field select:focus {
+            outline: none;
+            border-color: #1976D2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        
+        .boolean-input-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .boolean-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+        
+        .boolean-option:hover {
+            background: #f8f9fa;
+            border-color: #1976D2;
+        }
+        
+        .boolean-option input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .array-input-container,
+        .object-input-container {
+            position: relative;
+        }
+        
+        .input-helper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+            gap: 8px;
+        }
+        
+        .input-helper small {
+            color: #666;
+            font-style: italic;
+            font-size: 0.8em;
+        }
+        
+        .add-array-item-btn,
+        .format-json-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .add-array-item-btn:hover,
+        .format-json-btn:hover {
+            background: #218838;
+        }
+        
+        .validation-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .force-validation-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.85em;
+            position: relative;
+            color: #666;
+            white-space: nowrap;
+        }
+        
+        .force-validation-checkbox input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .validation-tooltip {
+            background: #6c757d;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .validation-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            border: 6px solid transparent;
+            border-top-color: #6c757d;
+        }
+        
+        .force-validation-checkbox:hover .validation-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .parameter-validation-message {
+            margin-top: 6px;
+            font-size: 11px;
+            min-height: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .parameter-validation-message.invalid {
+            color: #dc3545;
+            font-weight: 500;
+        }
+        
+        .parameter-validation-message.valid {
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 {{TITLE}}</h1>
+            <div class="version">Version {{VERSION}}</div>
+        </header>
+
+        <main>
+            <div class="main-content">
+                <div class="card">
+                    <h3>🚀 MCP Tools Interface</h3>
+                    <p>Universal browser-based access to all MCP tools with interactive execution forms. Swagger-like web interface for easy tool discovery and testing.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔧 API Endpoints</h3>
+                    <ul>
+                        <li><strong>[GET] Web Interface:</strong> <a href="{{BASE_URL}}/" target="_blank">{{BASE_URL}}/</a></li>
+                        <li><strong>[GET] Tools API:</strong> <a href="{{BASE_URL}}/api/tools" target="_blank">{{BASE_URL}}/api/tools</a></li>
+                        <li><strong>[POST] Execution API:</strong> <a href="{{EXECUTION_API}}" target="_blank">{{EXECUTION_API}}</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <section class="tools-section">
+                <h3>🛠️ Available MCP Tools</h3>
+                
+                <!-- Search and Filter Section -->
+                <div class="search-filter-section">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="🔍 Search tools by name, description, or parameters..." class="search-input">
+                        <button id="clear-search" class="clear-button" style="display: none;">✕</button>
+                    </div>
+                    <div class="filter-container">
+                        <div class="filter-tags" id="filter-tags">
+                            <span class="filter-label">Categories:</span>
+                            <!-- Filter tags will be generated dynamically -->
+                        </div>
+                        <button id="clear-filters" class="clear-filters-btn" style="display: none;">Clear All Filters</button>
+                    </div>
+                </div>
+                
+                <div class="results-summary" id="results-summary" style="display: none;">
+                    <span id="results-count"></span>
+                </div>
+                
+                <div id="tools-container" class="loading">
+                    Loading tools...
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>MCP Tools Web Interface - Universal browser-based access to MCP tools</p>
+        </footer>
+    </div>
+
+    <script>
+        // Global variables for search and filtering
+        let allTools = [];
+        let currentFilters = new Set();
+        let currentSearchTerm = '';
+
+        // URL hash navigation functions
+        function updateURL(toolName) {
+            if (toolName) {
+                window.history.pushState(null, null, `#${toolName}`);
+            } else {
+                window.history.pushState(null, null, window.location.pathname);
+            }
+        }
+
+        function scrollToTool(toolName) {
+            const toolCard = document.querySelector(`[onclick="toggleToolDetails('${toolName}')"]`);
+            if (toolCard) {
+                setTimeout(() => {
+                    toolCard.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start',
+                        inline: 'nearest'
+                    });
+                }, 100);
+            }
+        }
+
+        function loadToolFromHash() {
+            const hash = window.location.hash.substring(1); // Remove the '#'
+            if (hash) {
+                console.log(`Loading tool from hash: ${hash}`);
+                const detailsElement = document.getElementById(`details-${hash}`);
+                if (detailsElement) {
+                    // Expand the tool with scrolling (from URL hash)
+                    detailsElement.classList.add('show');
+                    // Scroll to the tool
+                    scrollToTool(hash);
+                } else {
+                    console.log(`Tool not found: ${hash}`);
+                }
+            }
+        }
+
+        // Phase 2: Tool Discovery and Display
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('{{TITLE}} - Phase 2 loaded');
+            console.log('Version: {{VERSION}}');
+            console.log('Base URL: {{BASE_URL}}');
+            console.log('Phase: {{CURRENT_PHASE}}');
+            
+            // Load and display tools
+            loadMCPTools();
+            
+            // Initialize search and filter functionality
+            initializeSearchAndFilter();
+        });
+
+        function initializeSearchAndFilter() {
+            const searchInput = document.getElementById('search-input');
+            const clearSearchBtn = document.getElementById('clear-search');
+            const clearFiltersBtn = document.getElementById('clear-filters');
+            
+            // Search input handler
+            searchInput.addEventListener('input', function(e) {
+                currentSearchTerm = e.target.value.trim();
+                clearSearchBtn.style.display = currentSearchTerm ? 'flex' : 'none';
+                filterAndDisplayTools();
+            });
+            
+            // Clear search button
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                currentSearchTerm = '';
+                clearSearchBtn.style.display = 'none';
+                filterAndDisplayTools();
+            });
+            
+            // Clear all filters button
+            clearFiltersBtn.addEventListener('click', function() {
+                currentFilters.clear();
+                currentSearchTerm = '';
+                searchInput.value = '';
+                clearSearchBtn.style.display = 'none';
+                clearFiltersBtn.style.display = 'none';
+                
+                // Reset all filter tags
+                document.querySelectorAll('.filter-tag').forEach(tag => {
+                    tag.classList.remove('active');
+                });
+                
+                filterAndDisplayTools();
+            });
+        }
+
+        function generateFilterTags(tools) {
+            const categories = new Set();
+            tools.forEach(tool => {
+                categories.add(tool.category);
+            });
+            
+            const filterTagsContainer = document.getElementById('filter-tags');
+            filterTagsContainer.innerHTML = '<span class="filter-label">Categories:</span>';
+            
+            Array.from(categories).sort().forEach(category => {
+                const tag = document.createElement('span');
+                tag.className = 'filter-tag';
+                tag.textContent = category;
+                tag.addEventListener('click', function() {
+                    toggleFilter(category, tag);
+                });
+                filterTagsContainer.appendChild(tag);
+            });
+        }
+
+        function toggleFilter(category, tagElement) {
+            if (currentFilters.has(category)) {
+                currentFilters.delete(category);
+                tagElement.classList.remove('active');
+            } else {
+                currentFilters.add(category);
+                tagElement.classList.add('active');
+            }
+            
+            document.getElementById('clear-filters').style.display = 
+                currentFilters.size > 0 || currentSearchTerm ? 'block' : 'none';
+            
+            filterAndDisplayTools();
+        }
+
+        function filterAndDisplayTools() {
+            const filteredTools = allTools.filter(tool => {
+                // Category filter
+                if (currentFilters.size > 0 && !currentFilters.has(tool.category)) {
+                    return false;
+                }
+                
+                // Search filter
+                if (currentSearchTerm) {
+                    const searchLower = currentSearchTerm.toLowerCase();
+                    return tool.name.toLowerCase().includes(searchLower) ||
+                           tool.short_description.toLowerCase().includes(searchLower) ||
+                           (tool.parameters && tool.parameters.some(p => 
+                               p.name.toLowerCase().includes(searchLower) ||
+                               (p.description && p.description.toLowerCase().includes(searchLower))
+                           ));
+                }
+                
+                return true;
+            });
+            
+            displayFilteredTools(filteredTools);
+            updateResultsSummary(filteredTools.length, allTools.length);
+        }
+
+        function displayFilteredTools(tools) {
+            const toolsContainer = document.getElementById('tools-container');
+            
+            if (tools.length === 0) {
+                toolsContainer.innerHTML = `
+                    <div class="card">
+                        <p>🔍 No tools found matching your criteria</p>
+                        <p>Try adjusting your search or filters</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="tools-grid">';
+            
+            tools.forEach(tool => {
+                const requiredParams = tool.parameters ? tool.parameters.filter(p => p.required).length : 0;
+                const totalParams = tool.parameters ? tool.parameters.length : 0;
+                
+                // Highlight search terms
+                const highlightedName = highlightSearchTerm(tool.name, currentSearchTerm);
+                const highlightedDescription = highlightSearchTerm(tool.short_description, currentSearchTerm);
+                
+                html += `
+                    <div class="tool-card" onclick="toggleToolDetails('${tool.name}')">
+                        <div class="tool-header">
+                            <div class="tool-info">
+                                <div class="tool-name">${highlightedName}</div>
+                                <div class="tool-category">${tool.category}</div>
+                                <div class="tool-description">${highlightedDescription}</div>
+                            </div>
+                            <div class="tool-parameters">
+                                <span class="parameters-count">${totalParams} params (${requiredParams} required)</span>
+                            </div>
+                        </div>
+                        <div class="tool-details" id="details-${tool.name}">
+                            ${generateParametersHTML(tool.parameters, tool.name)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            toolsContainer.innerHTML = html;
+        }
+
+        function highlightSearchTerm(text, searchTerm) {
+            if (!searchTerm) return text;
+            
+            const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function updateResultsSummary(filteredCount, totalCount) {
+            const summaryElement = document.getElementById('results-summary');
+            const countElement = document.getElementById('results-count');
+            
+            if (filteredCount === totalCount) {
+                summaryElement.style.display = 'none';
+            } else {
+                summaryElement.style.display = 'block';
+                countElement.textContent = `Showing ${filteredCount} of ${totalCount} tools`;
+            }
+        }
+
+        // Handle hash changes (back/forward browser buttons)
+        window.addEventListener('hashchange', function() {
+            loadToolFromHash();
+        });
+        
+        async function loadMCPTools() {
+            const toolsContainer = document.getElementById('tools-container');
+            
+            try {
+                console.log('Loading MCP tools from /api/tools endpoint');
+                
+                // Make actual API call to /api/tools
+                const response = await fetch('/api/tools');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const rawData = await response.json();
+                console.log('Raw API response received:', rawData);
+                
+                // API now returns data as proper JSON object (not string)
+                const data = rawData.data;
+                console.log('Tools data extracted:', data);
+                
+                if (data && data.success && data.tools && data.tools.length > 0) {
+                    displayTools(data.tools, data.total_tools);
+                } else if (data && data.error) {
+                    toolsContainer.innerHTML = `
+                        <div class="card">
+                            <p>❌ API Error: ${data.error}</p>
+                            <p>Phase 2 pipeline issue with lng_get_tools_info</p>
+                        </div>
+                    `;
+                } else {
+                    toolsContainer.innerHTML = `
+                        <div class="card">
+                            <p>⚠️ No tools found</p>
+                            <p>API response: ${JSON.stringify(data)}</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Error loading tools from API:', error);
+                toolsContainer.innerHTML = `
+                    <div class="card">
+                        <p>❌ Failed to load tools from API: ${error.message}</p>
+                        <p><a href="/api/tools" target="_blank">Test /api/tools directly →</a></p>
+                    </div>
+                `;
+            }
+        }
+        
+        function displayTools(tools, totalCount) {
+            // Store tools globally for filtering
+            allTools = tools;
+            
+            // Generate filter tags
+            generateFilterTags(tools);
+            
+            // Display all tools initially
+            displayFilteredTools(tools);
+            
+            console.log(`Loaded ${tools.length} tools with search and filtering`);
+            
+            // Check if we need to load a tool from URL hash
+            loadToolFromHash();
+        }
+        
+        // JSON Schema to HTML Form Converter - Phase 7: Dynamic Form Generation
+        function generateParametersHTML(parameters, toolName) {
+            if (!parameters || parameters.length === 0) {
+                return `
+                    <div class="parameters-section">
+                        <p><em>No parameters required</em></p>
+                        <div class="execute-section" onclick="event.stopPropagation()">
+                            <form class="execute-form" onsubmit="executeTool('${toolName}', event)">
+                                <div class="execute-button-container">
+                                    <button type="submit" class="execute-button" onclick="event.stopPropagation()">Execute ${toolName}</button>
+                                    <div class="validation-controls">
+                                        <label class="force-validation-checkbox">
+                                            <input type="checkbox" id="force-validation-${toolName}" checked> 
+                                            Enable validation
+                                            <div class="validation-tooltip">
+                                                Uncheck to bypass validation for testing with incomplete data
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="result-${toolName}" class="result-section" style="display: none;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            let html = '<div class="parameters-section">';
+            html += '<div class="execute-section" onclick="event.stopPropagation()">';
+            html += `<form class="execute-form" onsubmit="executeTool('${toolName}', event)">`;
+            
+            parameters.forEach((param, index) => {
+                html += generateParameterField(param, toolName, index);
+            });
+            
+            html += `
+                        <div class="execute-button-container">
+                            <button type="submit" class="execute-button" onclick="event.stopPropagation()">Execute ${toolName}</button>
+                            <div class="validation-controls">
+                                <label class="force-validation-checkbox">
+                                    <input type="checkbox" id="force-validation-${toolName}" checked> 
+                                    Enable validation
+                                    <div class="validation-tooltip">
+                                        Uncheck to bypass validation for testing with incomplete data
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="result-${toolName}" class="result-section" style="display: none;"></div>
+                </div>
+            </div>`;
+            
+            return html;
+        }
+        
+        // Generate individual parameter field based on JSON Schema
+        function generateParameterField(param, toolName, index) {
+            const fieldId = `${toolName}-${param.name}`;
+            const required = param.required ? 'required' : '';
+            const requiredLabel = param.required ? 
+                '<span class="parameter-required">required</span>' : 
+                '<span class="parameter-optional">optional</span>';
+            
+            let typeInfo = '';
+            let inputHtml = '';
+            
+            // Handle type information (can be string or array)
+            const types = Array.isArray(param.type) ? param.type : [param.type];
+            const primaryType = types[0];
+            
+            // Generate type badges
+            types.forEach(type => {
+                typeInfo += `<span class="parameter-type">${type}</span>`;
+            });
+            
+            // Add enum badge if present
+            if (param.enum) {
+                typeInfo += `<span class="parameter-enum">enum(${param.enum.length})</span>`;
+            }
+            
+            // Generate appropriate input based on type
+            switch (primaryType) {
+                case 'string':
+                    inputHtml = generateStringInput(param, fieldId, required);
+                    break;
+                case 'integer':
+                case 'number':
+                    inputHtml = generateNumberInput(param, fieldId, required, primaryType);
+                    break;
+                case 'boolean':
+                    inputHtml = generateBooleanInput(param, fieldId);
+                    break;
+                case 'array':
+                    inputHtml = generateArrayInput(param, fieldId, required);
+                    break;
+                case 'object':
+                    inputHtml = generateObjectInput(param, fieldId, required);
+                    break;
+                default:
+                    inputHtml = generateGenericInput(param, fieldId, required);
+            }
+            
+            return `
+                <div class="parameter-field" data-type="${primaryType}" data-required="${param.required || false}">
+                    <div class="parameter-header">
+                        <label class="parameter-name" for="${fieldId}">${param.name}</label>
+                        ${requiredLabel}
+                        ${typeInfo}
+                    </div>
+                    ${inputHtml}
+                    <div class="parameter-validation-message" id="validation-${fieldId}"></div>
+                </div>
+            `;
+        }
+        
+        // String input generator
+        function generateStringInput(param, fieldId, required) {
+            // Use description as placeholder, fallback to parameter name
+            const placeholder = param.description || `Enter ${param.name}`;
+            
+            // Handle enum values
+            if (param.enum) {
+                let options = '<option value="">Select an option...</option>';
+                param.enum.forEach(value => {
+                    options += `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`;
+                });
+                return `
+                    <select id="${fieldId}" ${required} onclick="event.stopPropagation()" onchange="validateParameter('${fieldId}')">
+                        ${options}
+                    </select>
+                `;
+            }
+            
+            // Handle long text (textarea for long descriptions)
+            if (param.description && param.description.length > 100) {
+                return `
+                    <textarea id="${fieldId}" 
+                              placeholder="${escapeHtml(placeholder)}" 
+                              ${required} 
+                              onclick="event.stopPropagation()" 
+                              oninput="validateParameter('${fieldId}')"
+                              rows="4"></textarea>
+                `;
+            }
+            
+            // Regular text input
+            return `
+                <input type="text" 
+                       id="${fieldId}" 
+                       placeholder="${escapeHtml(placeholder)}" 
+                       ${required} 
+                       onclick="event.stopPropagation()" 
+                       oninput="validateParameter('${fieldId}')" />
+            `;
+        }
+        
+        // Number input generator
+        function generateNumberInput(param, fieldId, required, type) {
+            const inputType = type === 'integer' ? 'number' : 'number';
+            const step = type === 'integer' ? '1' : 'any';
+            // Use description as placeholder, fallback to parameter name with type hint
+            const placeholder = param.description || `Enter ${param.name} (${type})`;
+            
+            let attributes = `step="${step}"`;
+            if (param.minimum !== undefined) attributes += ` min="${param.minimum}"`;
+            if (param.maximum !== undefined) attributes += ` max="${param.maximum}"`;
+            
+            return `
+                <input type="${inputType}" 
+                       id="${fieldId}" 
+                       placeholder="${escapeHtml(placeholder)}" 
+                       ${attributes}
+                       ${required} 
+                       onclick="event.stopPropagation()" 
+                       oninput="validateParameter('${fieldId}')" />
+            `;
+        }
+        
+        // Boolean input generator
+        function generateBooleanInput(param, fieldId) {
+            return `
+                <div class="boolean-input-container">
+                    <label class="boolean-option">
+                        <input type="radio" name="${fieldId}" value="true" onclick="event.stopPropagation()" onchange="validateParameter('${fieldId}')">
+                        True
+                    </label>
+                    <label class="boolean-option">
+                        <input type="radio" name="${fieldId}" value="false" onclick="event.stopPropagation()" onchange="validateParameter('${fieldId}')">
+                        False
+                    </label>
+                    <label class="boolean-option">
+                        <input type="radio" name="${fieldId}" value="" checked onclick="event.stopPropagation()" onchange="validateParameter('${fieldId}')">
+                        Default
+                    </label>
+                </div>
+            `;
+        }
+        
+        // Array input generator
+        function generateArrayInput(param, fieldId, required) {
+            // Use description as placeholder with array hint
+            const placeholder = param.description || `Enter JSON array for ${param.name} - e.g., ["item1", "item2"]`;
+            
+            return `
+                <div class="array-input-container">
+                    <textarea id="${fieldId}" 
+                              placeholder="${escapeHtml(placeholder)}" 
+                              ${required} 
+                              onclick="event.stopPropagation()" 
+                              oninput="validateParameter('${fieldId}')"
+                              rows="4"
+                              data-json-type="array"></textarea>
+                    <div class="input-helper">
+                        <small>Enter JSON array: ["item1", "item2"] or click + to add items</small>
+                        <button type="button" class="add-array-item-btn" onclick="addArrayItem('${fieldId}', event)">+ Add Item</button>
+                    </div>
+                    <div class="array-visual-editor" id="array-editor-${fieldId}" style="display: none;"></div>
+                </div>
+            `;
+        }
+        
+        // Object input generator
+        function generateObjectInput(param, fieldId, required) {
+            // Use description as placeholder with object hint
+            const placeholder = param.description || `Enter JSON object for ${param.name} - e.g., {"key": "value", "key2": 123}`;
+            
+            return `
+                <div class="object-input-container">
+                    <textarea id="${fieldId}" 
+                              placeholder="${escapeHtml(placeholder)}" 
+                              ${required} 
+                              onclick="event.stopPropagation()" 
+                              oninput="validateParameter('${fieldId}')"
+                              rows="6"
+                              data-json-type="object"></textarea>
+                    <div class="input-helper">
+                        <small>Enter JSON object: {"key": "value", "key2": 123}</small>
+                        <button type="button" class="format-json-btn" onclick="formatJSON('${fieldId}', event)">Format JSON</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Generic input generator (fallback)
+        function generateGenericInput(param, fieldId, required) {
+            // Use description as placeholder with generic hint
+            const placeholder = param.description || `Enter ${param.name} as text or JSON`;
+            
+            return `
+                <textarea id="${fieldId}" 
+                          placeholder="${escapeHtml(placeholder)}" 
+                          ${required} 
+                          onclick="event.stopPropagation()" 
+                          oninput="validateParameter('${fieldId}')"
+                          rows="3"></textarea>
+                <div class="input-helper">
+                    <small>Enter value as text or JSON</small>
+                </div>
+            `;
+        }
+        
+        function toggleToolDetails(toolName, shouldScroll = false) {
+            const detailsElement = document.getElementById(`details-${toolName}`);
+            const cardElement = document.querySelector(`[onclick="toggleToolDetails('${toolName}')"]`);
+            
+            if (detailsElement) {
+                const isCurrentlyOpen = detailsElement.classList.contains('show');
+                
+                if (isCurrentlyOpen) {
+                    // Closing tool - remove hash
+                    detailsElement.classList.remove('show');
+                    if (window.location.hash === `#${toolName}`) {
+                        history.replaceState(null, null, window.location.pathname);
+                    }
+                } else {
+                    // Opening tool - add hash but only scroll if shouldScroll is true
+                    detailsElement.classList.add('show');
+                    window.location.hash = `#${toolName}`;
+                    
+                    // Only scroll if explicitly requested (from URL hash or browser navigation)
+                    if (shouldScroll) {
+                        setTimeout(() => {
+                            if (cardElement) {
+                                cardElement.scrollIntoView({ 
+                                    behavior: 'smooth', 
+                                    block: 'start',
+                                    inline: 'nearest'
+                                });
+                            }
+                        }, 100);
+                    }
+                }
+            }
+        }
+        
+        // Parameter validation functions
+        function validateParameter(fieldId) {
+            const field = document.getElementById(fieldId);
+            const validationDiv = document.getElementById(`validation-${fieldId}`);
+            
+            if (!field || !validationDiv) return true;
+            
+            const paramField = field.closest('.parameter-field');
+            const isRequired = paramField?.dataset.required === 'true';
+            const dataType = paramField?.dataset.type;
+            
+            let isValid = true;
+            let message = '';
+            
+            const value = getFieldValue(field);
+            
+            // Check required fields
+            if (isRequired && (value === '' || value === null || value === undefined)) {
+                isValid = false;
+                message = 'This field is required';
+            }
+            // Validate data types
+            else if (value !== '' && value !== null && value !== undefined) {
+                const validation = validateDataType(value, dataType);
+                isValid = validation.valid;
+                message = validation.message;
+            }
+            
+            // Update UI
+            validationDiv.textContent = message;
+            validationDiv.className = `parameter-validation-message ${isValid ? 'valid' : 'invalid'}`;
+            paramField.classList.toggle('parameter-error', !isValid);
+            
+            return isValid;
+        }
+        
+        function validateDataType(value, dataType) {
+            try {
+                switch (dataType) {
+                    case 'integer':
+                        const intVal = parseInt(value);
+                        if (isNaN(intVal) || intVal.toString() !== value.toString()) {
+                            return { valid: false, message: 'Must be a valid integer' };
+                        }
+                        break;
+                    case 'number':
+                        const numVal = parseFloat(value);
+                        if (isNaN(numVal)) {
+                            return { valid: false, message: 'Must be a valid number' };
+                        }
+                        break;
+                    case 'boolean':
+                        if (value !== 'true' && value !== 'false' && value !== '') {
+                            return { valid: false, message: 'Must be true, false, or empty' };
+                        }
+                        break;
+                    case 'array':
+                        if (value.trim() !== '') {
+                            JSON.parse(value);
+                            const parsed = JSON.parse(value);
+                            if (!Array.isArray(parsed)) {
+                                return { valid: false, message: 'Must be a valid JSON array' };
+                            }
+                        }
+                        break;
+                    case 'object':
+                        if (value.trim() !== '') {
+                            JSON.parse(value);
+                            const parsed = JSON.parse(value);
+                            if (Array.isArray(parsed) || typeof parsed !== 'object') {
+                                return { valid: false, message: 'Must be a valid JSON object' };
+                            }
+                        }
+                        break;
+                }
+                return { valid: true, message: '' };
+            } catch (e) {
+                if (dataType === 'array' || dataType === 'object') {
+                    return { valid: false, message: 'Invalid JSON format' };
+                }
+                return { valid: false, message: 'Invalid value format' };
+            }
+        }
+        
+        function getFieldValue(field) {
+            if (field.type === 'radio') {
+                const form = field.closest('form');
+                const checked = form.querySelector(`input[name="${field.name}"]:checked`);
+                return checked ? checked.value : '';
+            }
+            return field.value;
+        }
+        
+        // Array helper functions
+        function addArrayItem(fieldId, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const textarea = document.getElementById(fieldId);
+            const currentValue = textarea.value.trim();
+            
+            let newItem = '';
+            const itemType = prompt('Enter new item (string, number, or JSON object):');
+            if (itemType === null) return;
+            
+            try {
+                // Try to parse as JSON first
+                JSON.parse(itemType);
+                newItem = itemType;
+            } catch {
+                // Treat as string
+                newItem = JSON.stringify(itemType);
+            }
+            
+            if (currentValue === '') {
+                textarea.value = `[${newItem}]`;
+            } else {
+                try {
+                    const currentArray = JSON.parse(currentValue);
+                    if (Array.isArray(currentArray)) {
+                        currentArray.push(JSON.parse(newItem));
+                        textarea.value = JSON.stringify(currentArray, null, 2);
+                    } else {
+                        textarea.value = `[${currentValue}, ${newItem}]`;
+                    }
+                } catch {
+                    textarea.value = `[${currentValue}, ${newItem}]`;
+                }
+            }
+            
+            validateParameter(fieldId);
+        }
+        
+        // JSON formatting helper
+        function formatJSON(fieldId, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const textarea = document.getElementById(fieldId);
+            try {
+                const parsed = JSON.parse(textarea.value);
+                textarea.value = JSON.stringify(parsed, null, 2);
+                validateParameter(fieldId);
+            } catch (e) {
+                alert('Invalid JSON format. Please check your syntax.');
+            }
+        }
+        
+        // HTML escaping utility
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Process parameter value based on its type
+        function processParameterValue(value, dataType) {
+            if (value === '' || value === null || value === undefined) {
+                return undefined;
+            }
+            
+            switch (dataType) {
+                case 'integer':
+                    return parseInt(value);
+                case 'number':
+                    return parseFloat(value);
+                case 'boolean':
+                    if (value === '') return undefined;
+                    return value === 'true';
+                case 'array':
+                    return JSON.parse(value);
+                case 'object':
+                    return JSON.parse(value);
+                default:
+                    return value;
+            }
+        }
+        
+        async function executeTool(toolName, event) {
+            event.preventDefault();
+            
+            const resultDiv = document.getElementById(`result-${toolName}`);
+            const button = event.target.querySelector('.execute-button');
+            const form = event.target;
+            
+            // Check if validation is enabled
+            const forceValidationCheckbox = document.getElementById(`force-validation-${toolName}`);
+            const validationEnabled = forceValidationCheckbox ? forceValidationCheckbox.checked : true;
+            
+            // Show loading state
+            button.disabled = true;
+            button.textContent = 'Executing...';
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Executing tool...';
+            resultDiv.className = 'result-section';
+            
+            try {
+                // Collect form parameters with improved logic
+                const params = {};
+                let hasValidationErrors = false;
+                
+                // Find all parameter fields in this form
+                const parameterFields = form.querySelectorAll('.parameter-field');
+                
+                parameterFields.forEach(paramField => {
+                    const nameLabel = paramField.querySelector('.parameter-name');
+                    const input = paramField.querySelector('input, textarea, select');
+                    
+                    if (nameLabel && input) {
+                        const paramName = nameLabel.textContent.trim();
+                        const fieldId = input.id;
+                        
+                        // Validate if validation is enabled
+                        if (validationEnabled) {
+                            const isValid = validateParameter(fieldId);
+                            if (!isValid) {
+                                hasValidationErrors = true;
+                            }
+                        }
+                        
+                        // Collect parameter value
+                        const value = getFieldValue(input);
+                        const dataType = paramField.dataset.type;
+                        
+                        // Process the value based on type
+                        if (value !== '' && value !== null && value !== undefined) {
+                            try {
+                                params[paramName] = processParameterValue(value, dataType);
+                            } catch (e) {
+                                if (validationEnabled) {
+                                    hasValidationErrors = true;
+                                    const validationDiv = document.getElementById(`validation-${fieldId}`);
+                                    if (validationDiv) {
+                                        validationDiv.textContent = `Error processing value: ${e.message}`;
+                                        validationDiv.className = 'parameter-validation-message invalid';
+                                    }
+                                } else {
+                                    // In force mode, try JSON parse, then fallback to string
+                                    try {
+                                        params[paramName] = JSON.parse(value);
+                                    } catch {
+                                        params[paramName] = value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Stop execution if validation errors and validation is enabled
+                if (validationEnabled && hasValidationErrors) {
+                    resultDiv.className = 'result-section result-error';
+                    resultDiv.innerHTML = `
+                        <div class="result-header">
+                            <span>❌ Validation Error</span>
+                        </div>
+                        <div class="result-content">
+                            <p>Please fix the parameter errors above before executing.</p>
+                            <p><em>Tip: Uncheck "Enable validation" to bypass validation for testing.</em></p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Make API call
+                const requestBody = {
+                    tool: toolName,
+                    params: params
+                };
+                
+                console.log('🚀 Sending request:', requestBody);
+                
+                const response = await fetch('{{EXECUTION_API}}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                console.log('📡 Response status:', response.status, response.statusText);
+                console.log('📡 Response headers:', [...response.headers.entries()]);
+                
+                const result = await response.json();
+                console.log('📦 Server response:', result);
+                
+                // Display result
+                if (result.success) {
+                    resultDiv.className = 'result-section result-success';
+                    // Show only tool_result if available, otherwise show the full response
+                    let displayData = result.tool_result || result.result || result;
+                    
+                    let responseText;
+                    let isJsonFormatted = false;
+                    
+                    // Smart JSON formatting - try to parse any string as JSON first
+                    if (typeof displayData === 'string') {
+                        try {
+                            // Try to parse any string as JSON
+                            const parsed = JSON.parse(displayData);
+                            
+                            // Check the type of parsed result
+                            if (typeof parsed === 'object' && parsed !== null) {
+                                // Object or array - pretty print as JSON
+                                responseText = JSON.stringify(parsed, null, 2);
+                                isJsonFormatted = true;
+                                console.log('🎨 JSON formatted from string (object/array):', displayData);
+                            } else {
+                                // Primitive value (string, number, boolean) - display as text
+                                responseText = String(parsed);
+                                isJsonFormatted = false;
+                                console.log('📝 Primitive value from JSON:', parsed);
+                            }
+                        } catch (e) {
+                            // If JSON parsing fails, display as is
+                            responseText = displayData;
+                            isJsonFormatted = false;
+                            console.log('📝 Text content (not valid JSON):', displayData);
+                        }
+                    } else if (typeof displayData === 'object' && displayData !== null) {
+                        // Already an object, format as JSON
+                        responseText = JSON.stringify(displayData, null, 2);
+                        isJsonFormatted = true;
+                        console.log('🎨 JSON formatted from object:', displayData);
+                    } else {
+                        // Primitive types (number, boolean, etc.)
+                        responseText = String(displayData);
+                        isJsonFormatted = false;
+                        console.log('📝 Primitive content:', displayData);
+                    }
+                    
+                    const formatIndicator = isJsonFormatted ? ' (JSON)' : ' (Text)';
+                        
+                    resultDiv.innerHTML = `
+                        <div class="result-header">
+                            <span>✅ Success (${result.execution_time || 0}ms)${formatIndicator}</span>
+                            <button class="copy-button" onclick="copyToClipboard('result-content-${toolName}', this)">Copy</button>
+                        </div>
+                        <div class="result-content">
+                            <pre class="result-code ${isJsonFormatted ? 'json-formatted' : 'text-content'}" id="result-content-${toolName}">${escapeHtml(responseText)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.className = 'result-section result-error';
+                    const responseText = JSON.stringify(result, null, 2);
+                    resultDiv.innerHTML = `
+                        <div class="result-header">
+                            <span>❌ Error</span>
+                            <button class="copy-button" onclick="copyToClipboard('result-content-${toolName}', this)">Copy</button>
+                        </div>
+                        <div class="result-content">
+                            <pre class="result-code" id="result-content-${toolName}">${escapeHtml(responseText)}</pre>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('❌ Network/Fetch Error:', error);
+                resultDiv.className = 'result-section result-error';
+                const errorText = `Network Error: ${error.message}\n\nStack Trace:\n${error.stack}`;
+                resultDiv.innerHTML = `
+                    <div class="result-header">
+                        <span>❌ Network Error</span>
+                        <button class="copy-button" onclick="copyToClipboard('result-content-${toolName}', this)">Copy</button>
+                    </div>
+                    <div class="result-content">
+                        <pre class="result-code" id="result-content-${toolName}">${escapeHtml(errorText)}</pre>
+                    </div>
+                `;
+            } finally {
+                // Reset button
+                button.disabled = false;
+                button.textContent = `Execute ${toolName}`;
+            }
+        }
+        
+        // Copy to clipboard function
+        function copyToClipboard(elementId, buttonElement) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                const text = element.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = buttonElement.textContent;
+                    buttonElement.textContent = 'Copied!';
+                    buttonElement.style.background = '#28a745';
+                    setTimeout(() => {
+                        buttonElement.textContent = originalText;
+                        buttonElement.style.background = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    buttonElement.textContent = 'Failed';
+                    setTimeout(() => {
+                        buttonElement.textContent = 'Copy';
+                    }, 2000);
+                });
+            }
+        }
+        
+        // Escape HTML characters for safe display
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+    </script>
+</body>
+</html>

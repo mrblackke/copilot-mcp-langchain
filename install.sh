@@ -23,10 +23,18 @@ eval_echo() {
 
 eval_echo "python --version"
 
+# updating pip 
+eval_echo "python -m pip install --upgrade pip"
+
 # create virtual environment
 eval_echo "pip install virtualenv"
-eval_echo "python -m virtualenv .virtualenv"
-eval_echo ". ./.virtualenv/bin/activate"
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || "$OSTYPE" == "cygwin" ]]; then    
+    # Windows 
+    eval_echo ". ./.virtualenv/Scripts/activate"     
+else    
+    # Linux/Unix 
+    eval_echo "source ./.virtualenv/bin/activate" 
+fi
 if [ -n "$VIRTUAL_ENV" ]; then
     color "Virtual environment activated: $VIRTUAL_ENV" $green
 else
@@ -47,3 +55,6 @@ eval_echo "pip install fastapi uvicorn requests"
 # Tool-specific dependencies are now managed via `settings.yaml` files.
 # Run this to install dependencies for enabled tools:
 eval_echo "python -m mcp_server.run install_dependencies"
+
+# You can also install dependencies for specific tools only:
+# eval_echo "python -m mcp_server.run install_dependencies lng_email_client lng_http_client"

@@ -1,0 +1,2 @@
+- Links contains `{workspaceFolder}` which should be replaced with absolute path to the project.
+- Follow the `./mcp-server/instructions/cursor-mcp-settings.agent.md` instuctions.

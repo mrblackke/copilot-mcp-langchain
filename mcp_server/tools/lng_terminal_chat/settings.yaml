@@ -1,0 +1,4 @@
+enabled: true
+description: "Terminal chat with LLM - analyzes command output and answers questions"
+dependencies:
+  - langchain

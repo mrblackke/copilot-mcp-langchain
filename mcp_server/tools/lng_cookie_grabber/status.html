@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Session Status</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .session-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007acc;
+        }
+        .download-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #007acc;
+        }
+        .download-btn {
+            display: inline-block;
+            margin: 5px 10px 5px 0;
+            padding: 10px 20px;
+            background-color: #007acc;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .download-btn:hover {
+            background-color: #005a9e;
+        }
+        .file-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .portals-textarea {
+            transition: all 0.2s ease;
+        }
+        .portals-textarea:hover {
+            border-color: #a0aec0;
+        }
+        .portals-section {
+            margin: 20px 0;
+        }
+        .security-section {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .security-title {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+        .security-text {
+            margin: 5px 0;
+            color: #2e7d32;
+        }
+        .portals-textarea-field {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            background-color: #f8f9fa;
+            resize: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            overflow: hidden;
+        }
+        .portals-help {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+        #plugin-data {
+            display: none;
+        }
+        .status-cookies-plugin {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background-color: #ddd;
+            color: #666;
+        }
+        .plugin-button-section {
+            margin-top: 15px;
+        }
+        .run-cookies-button {
+            background-color: #28a745;
+            font-size: 16px;
+            padding: 12px 24px;
+        }
+        .installation-info {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e7f3ff;
+            border-radius: 4px;
+        }
+        .debug-logs-textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.3;
+            background-color: #2d3748;
+            color: #e2e8f0;
+            resize: vertical;
+            box-sizing: border-box;
+            white-space: pre-wrap;
+            overflow-y: auto;
+        }
+        .debug-logs-help {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .password-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+        }
+        .password-modal-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #1a365d;
+            font-weight: bold;
+        }
+        .password-modal-info {
+            background: #e6f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 13px;
+            color: #2c5282;
+        }
+        .password-modal-warning {
+            margin-top: 8px;
+            color: #d69e2e;
+        }
+        .password-modal-label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .password-modal-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-family: 'Consolas', 'Courier New', monospace;
+            transition: border-color 0.2s;
+        }
+        .password-modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .password-modal-button-ok {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(72, 187, 120, 0.3);
+        }
+        .password-modal-button-cancel {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(229, 62, 62, 0.3);
+        }
+        .portals-list {
+            margin-top: 15px;
+        }
+        .run-cookies-plugin-custom {
+            background-color: #28a745;
+            font-size: 16px;
+            padding: 12px 24px;
+        }
+        .installation-info-detailed {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e7f3ff;
+            border-radius: 4px;
+        }
+        .debug-help-text {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍪 Cookie Session Status - Corporate Security</h1>
+        <div class="session-id">Session ID: {{SESSION_ID}}</div>
+        
+        <div class="security-section">
+            <h3 class="security-title">🔐 Browser-Side Corporate Encryption</h3>
+            <p class="security-text">
+                ✅ AES-256-GCM Encryption <strong>(in Browser)</strong><br>
+                ✅ Secure Password Prompt<br>
+                ✅ PBKDF2 Key Derivation (100k iterations)<br>
+                ✅ No plaintext cookies on network/server<br>
+                ✅ Corporate paranoia mode enabled
+            </p>
+        </div>        
+        
+        <div class="portals-list">
+            <h3>🌐 Portal List (Editable):</h3>
+            <div class="portals-help">
+                <textarea id="portals-textarea" class="portals-textarea-field" placeholder="Enter portal URLs, one per line...">{{PORTALS}}</textarea>
+                <div class="portals-help">
+                    📝 Edit portals directly here. Changes are saved automatically for plugin use.
+                </div>
+            </div>
+        </div>
+
+        <!-- Data for plugin to extract from DOM -->
+        <div id="plugin-data">
+            <div id="session-id">{{SESSION_ID}}</div>
+        </div>
+                
+        <div class="download-section">
+            <h2>Plugin Status</h2>
+            <div class="status-cookies-plugin">[checking plugin status...]</div>
+            
+            <div class="plugin-button-section">
+                <button id="run-cookies-plugin" class="download-btn run-cookies-plugin-custom">
+                    🚀 Run Encrypted Cookie Grabber
+                </button>
+                <div class="file-info">
+                    Click to start collecting and encrypting cookies from all portals<br>
+                    <strong>⚠️ You will be prompted for encryption password</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h2>Chrome Extension Files</h2>
+            <p>Download the Chrome extension files for cookie grabbing:</p>
+            
+            <a href="/download/background.js?sessionId={{SESSION_ID}}" class="download-btn" download="background.js">
+                Download background.js
+            </a>
+            <div class="file-info">Main extension background script</div>
+            
+            <a href="/download/manifest.json?sessionId={{SESSION_ID}}" class="download-btn" download="manifest.json">
+                Download manifest.json
+            </a>
+            <div class="file-info">Chrome extension manifest file</div>
+            
+            <div class="installation-info-detailed">
+                <strong>Installation:</strong> Download both files, create a folder, place them inside, 
+                then load the folder as unpacked extension in Chrome Developer Mode.
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h2>🐛 Debug Logs</h2>
+            <p>Real-time plugin logs for debugging:</p>
+            
+            <textarea id="debug-logs" readonly class="debug-logs-textarea" placeholder="Plugin logs will appear here..."></textarea>
+            
+            <div class="debug-help-text">
+                🔧 All plugin console.log messages are duplicated here for easy debugging.
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔐 Corporate Password Modal (HTML only, JS in plugin) -->
+    <div id="cookie-password-modal" class="password-modal">
+        <div class="password-modal-content">
+            <div class="password-modal-title">🔐 Corporate Cookie Encryption</div>
+            
+            <div class="password-modal-info">
+                <div><strong>Session:</strong> <span id="modal-session-id"></span></div>
+                <div><strong>Encryption:</strong> AES-256-GCM</div>
+                <div><strong>Key Derivation:</strong> PBKDF2 (100k iterations)</div>
+                <div class="password-modal-warning"><strong>⚠️ Password will be required for decryption in HTTP requests</strong></div>
+            </div>
+            
+            <label class="password-modal-label">Enter encryption password:</label>
+            
+            <input type="password" id="cookie-password-input" placeholder="Enter password (minimum 4 characters)" class="password-modal-input">
+            
+            <div class="password-modal-buttons">
+                <button id="cookie-password-ok" class="password-modal-button-ok">🔒 Encrypt Cookies</button>
+                
+                <button id="cookie-password-cancel" class="password-modal-button-cancel">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

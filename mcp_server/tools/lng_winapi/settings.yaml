@@ -1,5 +1,6 @@
-enabled: false
-description: "WinAPI tools for Windows automation (disabled by default due to platform-specific dependencies)"
+enabled: true
+description: "WinAPI tools for Windows automation"
 dependencies:
   - "pywinauto"
   - "psutil"
+  - "pywin32"

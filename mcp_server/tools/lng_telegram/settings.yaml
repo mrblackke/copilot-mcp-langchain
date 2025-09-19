@@ -1,0 +1,4 @@
+enabled: true
+description: Telegram integration tools for bot development and messaging
+dependencies:
+  - python-telegram-bot

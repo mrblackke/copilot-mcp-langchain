@@ -1,0 +1,5 @@
+enabled: true
+description: "Universal Email Swiss Army Knife - powerful email client with SMTP, API services, templates, attachments, batch sending"
+dependencies:
+  - "requests"
+  - "jinja2"

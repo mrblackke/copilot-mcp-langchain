@@ -1,0 +1,6 @@
+enabled: true
+description: "Super Empath - бизнес-логика эмоционального переводчика для улучшения коммуникации"
+dependencies:
+  - python-telegram-bot
+  - python-dotenv
+  - psutil

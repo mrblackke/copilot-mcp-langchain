@@ -1,0 +1,4 @@
+enabled: true
+description: "Corporate-grade cookie encryption system with AES-256-GCM security for secure cookie storage and retrieval"
+dependencies:
+  - "cryptography"

@@ -1,0 +1,111 @@
+{
+  "user_params": {
+    "masks_file": "mcp_server/projects/docs-rag/input/file-masks.txt",
+    "base_path": ".",
+    "excluded_dirs": ["node_modules", ".git", "__pycache__", "copilot-session"],
+    "log_file": "mcp_server/projects/docs-rag/logs/processing.log"
+  },
+  "pipeline": [
+    {
+      "tool": "lng_file_read",
+      "params": {
+        "file_path": "mcp_server/projects/docs-rag/prompt/critical_analysis.prompt"
+      },
+      "output": "critical_analysis_prompt_content"
+    },
+    {
+      "tool": "lng_llm_prompt_template",
+      "params": {
+        "command": "save",
+        "template_name": "critical_analysis",
+        "template": "{! critical_analysis_prompt_content !}"
+      },
+      "output": "critical_analysis_template_saved"
+    },
+    {
+      "tool": "lng_file_read",
+      "params": {
+        "file_path": "mcp_server/projects/docs-rag/prompt/project_analysis.prompt"
+      },
+      "output": "project_analysis_prompt_content"
+    },
+    {
+      "tool": "lng_llm_prompt_template",
+      "params": {
+        "command": "save",
+        "template_name": "project_analysis",
+        "template": "{! project_analysis_prompt_content !}"
+      },
+      "output": "project_analysis_template_saved"
+    },
+    {
+      "tool": "lng_file_read",
+      "params": {
+        "file_path": "{! user.masks_file !}"
+      },
+      "output": "masks_content"
+    },
+    {
+      "type": "forEach",
+      "forEach": "{! masks_content.split('\\n').filter(line => line.trim() && !line.trim().startsWith('#')) !}",
+      "item": "current_mask",
+      "do": [
+        {
+          "tool": "lng_file_list",
+          "params": {
+            "patterns": ["{! current_mask !}"],
+            "base_path": "{! user.base_path !}",
+            "include_files": true,
+            "include_directories": false,
+            "output_format": "list"
+          },
+          "output": "files_for_mask"
+        },
+        {
+          "type": "forEach", 
+          "forEach": "{! files_for_mask.split('\\n').filter(file => file.trim() && !user.excluded_dirs.some(dir => file.includes(dir))) !}",
+          "item": "current_file",
+          "do": [
+            {
+              "tool": "lng_file_read",
+              "params": {
+                "file_path": "{! current_file !}",
+                "encoding": "utf-8"
+              },
+              "output": "file_content"
+            },
+            {
+              "type": "condition",
+              "condition": "{! file_content && file_content.length > 10 !}",
+              "then": [
+                {
+                  "tool": "lng_llm_rag_add_data",
+                  "params": {
+                    "input_text": "{! file_content !}",
+                    "metadata": {
+                      "source_file": "{! current_file !}",
+                      "file_type": "{! current_file.split('.').pop() !}",
+                      "processed_at": "{! new Date().toISOString() !}",
+                      "mask_pattern": "{! current_mask !}"
+                    }
+                  },
+                  "output": "rag_result"
+                },
+                {
+                  "tool": "lng_file_write",
+                  "params": {
+                    "file_path": "{! user.log_file !}",
+                    "content": "File: {! current_file !}\nMask: {! current_mask !}\nChunks added: {! rag_result.chunks_added || 0 !}\nTotal characters: {! rag_result.total_characters || 0 !}\nProcessed at: {! new Date().toISOString() !}\n---------------\n",
+                    "mode": "append"
+                  },
+                  "output": "log_write_result"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "final_result": "{! `RAG processing completed successfully! Check detailed processing information in log file: ${user.log_file}` !}"
+}

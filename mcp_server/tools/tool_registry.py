@@ -4,8 +4,9 @@ import traceback
 import yaml
 from importlib import import_module
 from pathlib import Path
+from mcp_server.logging_config import setup_logging
 
-logger = logging.getLogger('mcp_server.tools')
+logger = setup_logging('mcp_server', logging.DEBUG)
 
 tool_definitions = []
 
@@ -88,6 +89,66 @@ def handle_problem_imports():
     # Start scanning from the tools directory
     scan_directory_for_imports(current_dir)
     logger.info("Completed handling problem imports for all enabled tools")
+
+def initialize_tools():
+    """Initialize all enabled tools that have an init method."""
+    logger.info("Starting to initialize enabled tools")
+    
+    # Get the directory where this file is located
+    current_dir = Path(os.path.dirname(os.path.abspath(__file__)))
+    logger.info(f"Scanning tools directory for initialization: {current_dir}")
+    
+    def scan_directory_for_init(directory: Path, prefix_parts: list = []):
+        """Recursively scan directory for tools with init method."""
+        for item in directory.iterdir():
+            if item.is_dir() and not item.name.startswith('__'):
+                current_prefix_parts = prefix_parts + [item.name]
+                
+                # Check if there's a tool.py file in the current directory
+                tool_file = item / 'tool.py'
+                if tool_file.exists():
+                    # Check if tool is disabled
+                    is_disabled, description = is_tool_disabled(item)
+                    if is_disabled:
+                        logger.info(f"Skipping initialization for disabled tool: {item.name} - {description}")
+                        continue
+                    
+                    # Build module path and try to import
+                    module_path = f"mcp_server.tools.{'.'.join(current_prefix_parts)}.tool"
+                    tool_name = '_'.join(current_prefix_parts)
+                    
+                    try:
+                        logger.info(f"Checking tool {tool_name} for init method")
+                        module = import_module(module_path)
+                        
+                        # Check if the module has an init function
+                        if hasattr(module, 'init'):
+                            logger.info(f"Found init method in {tool_name}, calling it")
+                            try:
+                                module.init()
+                                logger.info(f"Successfully executed init for {tool_name}")
+                            except Exception as e:
+                                logger.error(f"Error executing init for {tool_name}: {e}")
+                                logger.error(traceback.format_exc())
+                        else:
+                            logger.debug(f"No init method found in {tool_name}")
+                            
+                    except Exception as e:
+                        logger.error(f"Error importing module {module_path} for initialization: {e}")
+                        logger.error(traceback.format_exc())
+                else:
+                    # If no tool.py in current directory, continue scanning subdirectories
+                    # Check if the directory itself is disabled before scanning subdirectories
+                    is_disabled, description = is_tool_disabled(item)
+                    if is_disabled:
+                        logger.info(f"Skipping initialization for disabled tool group: {item.name} - {description}")
+                        continue
+                    # Always recurse into subdirectories to find tools at any depth
+                    scan_directory_for_init(item, current_prefix_parts)
+    
+    # Start scanning from the tools directory
+    scan_directory_for_init(current_dir)
+    logger.info("Completed initializing all enabled tools")
 
 def register_tool(name: str, module_path: str):
     """Registers a tool with its name and module path."""
@@ -226,3 +287,8 @@ async def run_tool(name: str, arguments: dict) -> list:
         raise
 
 register_tools()
+
+# Initialize all tools after registration
+logger.info("Starting tool initialization after registration")
+initialize_tools()
+logger.info("Tool initialization completed")

@@ -1,1 +1,3 @@
-- Follow the instructions in the file `mcp_server/instructions/main.agent.md`.
+- Important! Always follow the instructions in `mcp_server/instructions/main.agent.md` file.
+- It contains links to other files with instructions.
+- You should reload it in **every prompt** to get the latest instructions - because of the dynamic nature of the project. 

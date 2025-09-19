@@ -1,0 +1,3 @@
+enabled: true
+description: "JSON to CSV/Markdown converter with Java-compatible Matrix-based algorithm for complex nested structures"
+dependencies: []

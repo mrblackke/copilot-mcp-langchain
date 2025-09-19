@@ -1,0 +1,38 @@
+{
+  "operation": "start",
+  "pipeline": [
+    {
+      "tool": "lng_file_read",
+      "params": {
+        "file_path": "mcp_server/projects/super-empath/prompt/default_super_empath.txt"
+      },
+      "output": "prompt_content"
+    },
+    {
+      "tool": "lng_llm_prompt_template",
+      "params": {
+        "command": "save",
+        "template_name": "default_super_empath",
+        "template": "{! prompt_content !}"
+      },
+      "output": "template_saved"
+    },
+    {
+      "tool": "lng_telegram_polling_server",
+      "params": {
+        "operation": "stop",
+        "bot_name": "super_empath"
+      },
+      "output": "telegram_server_stopped"
+    },
+    {
+      "tool": "lng_telegram_polling_server",
+      "params": {
+        "operation": "start",
+        "bot_name": "super_empath",
+        "pipeline_file": "mcp_server/projects/super-empath/config/message_pipeline.json"
+      },
+      "output": "telegram_server_started"
+    }
+  ]
+}

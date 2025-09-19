@@ -1,0 +1,16 @@
+{
+  "agent_id": "26bfec4a-f9c8-4b76-948e-efdd91494471",
+  "name": "logs-monitor",
+  "module_path": "mcp_server/logs",
+  "available_tools": [
+    "lng_file_read",
+    "lng_file_write",
+    "lng_file_list"
+  ],
+  "description": "Agent for monitoring and analyzing system logs. Tracks log files, analyzes their content and provides reports on system operation.",
+  "system_prompt_template": "multi_agent_default",
+  "max_iterations": 20,
+  "max_execution_time": 120,
+  "created_at": "2025-08-14T15:52:46.917975",
+  "last_active": "2025-08-14T15:52:46.917980"
+}

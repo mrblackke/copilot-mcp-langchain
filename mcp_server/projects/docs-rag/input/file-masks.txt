@@ -1,0 +1,9 @@
+# Список масок для поиска документов
+# Каждая строка содержит glob паттерн для поиска файлов
+# Строки начинающиеся с # игнорируются
+
+docs/architecture/*.md
+docs/architecture/*.mermaid
+docs/diagrams/*.drawio.xml
+docs/markdown/*.md
+docs/meetings/meet*/architectural-questions.md

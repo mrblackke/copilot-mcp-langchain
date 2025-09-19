@@ -1,0 +1,10 @@
+enabled: true
+description: "Universal HTTP client with advanced features: requests, pagination, async, batching, auth, browser emulation, encrypted cookies"
+dependencies:
+  - "requests"
+  - "aiohttp"  
+  - "lxml"
+  - "beautifulsoup4"
+  - "websockets"
+  - "jsonpath-ng"
+  - "cryptography"

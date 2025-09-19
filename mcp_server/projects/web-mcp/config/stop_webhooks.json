@@ -1,0 +1,21 @@
+{
+  "pipeline": [
+    {
+      "tool": "lng_webhook_server",
+      "params": {
+        "operation": "stop",
+        "name": "web-mcp-interface"
+      },
+      "output": "static_server_stop_result"
+    },
+    {
+      "tool": "lng_webhook_server",
+      "params": {
+        "operation": "stop", 
+        "name": "execution-api"
+      },
+      "output": "execution_server_stop_result"
+    }
+  ],
+  "final_result": "{! 'Stopped: ' + (static_server_stop_result.success ? 'Static server ✓' : 'Static server ✗') + ', ' + (execution_server_stop_result.success ? 'Execution server ✓' : 'Execution server ✗') !}"
+}

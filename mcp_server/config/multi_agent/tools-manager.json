@@ -1,0 +1,16 @@
+{
+  "agent_id": "8a7e496b-a555-4061-8a88-b4a2225df76d",
+  "name": "tools-manager",
+  "module_path": "mcp_server/tools",
+  "available_tools": [
+    "lng_file_read",
+    "lng_file_write",
+    "lng_file_list"
+  ],
+  "description": "Agent for managing and analyzing system tools. Investigates available tools, their configuration and functionality.",
+  "system_prompt_template": "multi_agent_default",
+  "max_iterations": 20,
+  "max_execution_time": 120,
+  "created_at": "2025-08-14T15:52:56.211756",
+  "last_active": "2025-08-14T15:52:56.211759"
+}

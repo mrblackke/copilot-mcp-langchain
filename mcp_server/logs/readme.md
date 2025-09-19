@@ -11,3 +11,7 @@ This directory contains log files for the MCP (Model Context Protocol) server sy
 ## Usage
 
 Please read the `readme.md` file in the root directory for instructions on how to set up fake server logging (`## Debug`) and other configurations.
+
+## Other logs
+
+Please read the individual `readme.md` files in each log subdirectory for more information about the specific logs and their usage.

@@ -1,0 +1,12 @@
+{
+  "pipeline": [
+    {
+      "tool": "lng_telegram_super_empath",
+      "params": {
+        "telegram_context": "{! JSON.stringify(telegram) !}",
+        "prompt_template_name": "default_super_empath"
+      },
+      "output": "empath_result"
+    }
+  ]
+}

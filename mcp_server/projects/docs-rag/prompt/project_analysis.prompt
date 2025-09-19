@@ -1,0 +1,14 @@
+Based on the following project documentation, answer the user's question in a detailed and structured manner:
+
+Based on provided context:
+<context-from-documentation>
+{context}
+</context-from-documentation>
+
+Please provide a detailed analysis for the question: 
+<user-question>
+{query}
+</user-question>
+
+Please provide a detailed answer using information from the documentation. If there are specific details in the documentation, include them in your answer. Structure your answer logically with headings and lists where appropriate.
+So answer is:

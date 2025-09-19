@@ -1,0 +1,5 @@
+enabled: false
+description: "Multi-agent system for delegating code analysis tasks to specialized sub-agents. Uses LangChain agents with memory for intelligent module monitoring."
+dependencies:
+  - "langchain"
+  - "pydantic"

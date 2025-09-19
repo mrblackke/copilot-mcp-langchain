@@ -1,4 +1,74 @@
 {
     "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-    "chat.mcp.access": "all"
+    "chat.mcp.access": "all",
+    "chat.mcp.enabled": true,
+    "chat.agent.maxRequests": 250,
+    // "chat.tools.terminal.autoApprove": {
+    //     "git": false,
+    //     "/.*/": true
+    // },
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 100,
+    "python.defaultInterpreterPath": "${workspaceFolder}/.virtualenv/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "terminal.integrated.env.windows": {
+        "VIRTUAL_ENV": "${workspaceFolder}/.virtualenv"
+    },
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "args": [
+                "-NoExit",
+                "-Command", "cd '${workspaceFolder}'; if (Test-Path './mcp_server/virtualenv/autofix_encoding.ps1') { & './mcp_server/virtualenv/autofix_encoding.ps1' }; if (Test-Path './.virtualenv/Scripts/Activate.ps1') { & './.virtualenv/Scripts/Activate.ps1'; Write-Host 'Virtual environment activated automatically!' -ForegroundColor Green } else { Write-Host 'Virtual environment not found' -ForegroundColor Yellow }"
+            ]
+        },
+        "PowerShell VEnv": {
+            "source": "PowerShell",
+            "args": [
+                "-NoExit",
+                "-Command", "cd '${workspaceFolder}'; if (Test-Path './mcp_server/virtualenv/autofix_encoding.ps1') { & './mcp_server/virtualenv/autofix_encoding.ps1' }; if (Test-Path './.virtualenv/Scripts/Activate.ps1') { & './.virtualenv/Scripts/Activate.ps1'; Write-Host 'Virtual environment activated automatically!' -ForegroundColor Green } else { Write-Host 'Virtual environment not found' -ForegroundColor Yellow }"
+            ]
+        },
+        "CMD VEnv": {
+            "path": "${workspaceFolder}/mcp_server/virtualenv/activate_venv.bat"
+        }
+    },
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "args": [
+                "-c",
+                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.sh' ]; then source './mcp_server/virtualenv/autofix_encoding.sh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\033[32mVirtual environment activated automatically!\033[0m'; else echo -e '\033[33mVirtual environment not found\033[0m'; fi && exec bash"
+            ]
+        },
+        "zsh": {
+            "path": "zsh",
+            "args": [
+                "-c",
+                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.zsh' ]; then source './mcp_server/virtualenv/autofix_encoding.zsh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\033[32mVirtual environment activated automatically!\033[0m'; else echo -e '\033[33mVirtual environment not found\033[0m'; fi && exec zsh"
+            ]
+        }
+    },
+    "terminal.integrated.profiles.osx": {
+        "bash": {
+            "path": "bash",
+            "args": [
+                "-c",
+                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.sh' ]; then source './mcp_server/virtualenv/autofix_encoding.sh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\033[32mVirtual environment activated automatically!\033[0m'; else echo -e '\033[33mVirtual environment not found\033[0m'; fi && exec bash"
+            ]
+        },
+        "zsh": {
+            "path": "zsh",
+            "args": [
+                "-c",
+                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.zsh' ]; then source './mcp_server/virtualenv/autofix_encoding.zsh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\033[32mVirtual environment activated automatically!\033[0m'; else echo -e '\033[33mVirtual environment not found\033[0m'; fi && exec zsh"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.defaultProfile.osx": "zsh"
+}
 }

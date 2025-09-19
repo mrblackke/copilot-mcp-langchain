@@ -1,0 +1,21 @@
+{
+  "pipeline": [
+    {
+      "tool": "lng_webhook_server",
+      "params": {
+        "operation": "start",
+        "config_file": "mcp_server/projects/web-mcp/config/get_static.json"
+      },
+      "output": "static_server_result"
+    },
+    {
+      "tool": "lng_webhook_server", 
+      "params": {
+        "operation": "start",
+        "config_file": "mcp_server/projects/web-mcp/config/execute_tool.json"
+      },
+      "output": "execution_server_result"
+    }
+  ],
+  "final_result": "{! 'Started: ' + (static_server_result.success ? 'Static server ✓' : 'Static server ✗') + ', ' + (execution_server_result.success ? 'Execution server ✓' : 'Execution server ✗') !}"
+}

@@ -2,8 +2,17 @@
     "servers": {
       "langchain-mcp":{
           "type": "stdio",
+          // Linux/macOS
           "command": "${workspaceFolder}/.virtualenv/bin/python",
-          "args": ["${workspaceFolder}/mcp_server/server.py"]
+          "args": ["${workspaceFolder}/mcp_server/server.py"],
+          // Windows (uncomment if needed)
+          // "command": "${workspaceFolder}\\.virtualenv\\Scripts\\python.exe",
+          // "args": ["${workspaceFolder}\\mcp_server\\server.py"]
+      },
+      "github": {
+          "type": "http",
+          "url": "https://api.githubcopilot.com/mcp/"
+      }
       }
     }
 }

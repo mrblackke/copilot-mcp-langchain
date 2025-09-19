@@ -1,0 +1,7 @@
+{
+  "endpoint": "MCP Tools Discovery API",
+  "success": true,
+  "method": "{{METHOD}}",
+  "data": {{TOOLS_DATA}},
+  "timestamp": "{{TIMESTAMP}}"
+}

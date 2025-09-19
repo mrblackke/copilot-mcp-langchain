@@ -1,0 +1,52 @@
+{
+  "name": "cookie-status-server",
+  "port": 9000,
+  "path": "/api",
+  "bind_host": "localhost",
+  "html_routes": [
+    {
+      "pattern": "/cookies/{sessionId}",
+      "template": "mcp_server/tools/lng_cookie_grabber/status.html",
+      "mapping": {
+        "SESSION_ID": "{! url.sessionId !}",
+        "PORTALS": "https://next.telescope.epam.com\nhttps://heroes.epam.com\nhttps://staffing.epam.com"
+      }
+    },
+    {
+      "pattern": "/download/background.js",
+      "template": "mcp_server/tools/lng_cookie_grabber/templates/background.js",
+      "mapping": {
+        "SERVER_URL": "{! 'http://' + webhook.bind_host + ':' + webhook.port !}",
+        "WS_SERVER_URL": "{! 'ws://' + webhook.bind_host + ':' + (webhook.port + 1) + '/ws' !}"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/javascript",
+          "Content-Disposition": "attachment; filename=\"background.js\""
+        }
+      }
+    },
+    {
+      "pattern": "/download/manifest.json",
+      "template": "mcp_server/tools/lng_cookie_grabber/templates/manifest.json", 
+      "mapping": {},
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Content-Disposition": "attachment; filename=\"manifest.json\""
+        }
+      }
+    }
+  ],
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "message": "Cookie status server is running"
+    }
+  }
+}

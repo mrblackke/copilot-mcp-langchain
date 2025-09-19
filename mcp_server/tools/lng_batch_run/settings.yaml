@@ -1,0 +1,3 @@
+enabled: true
+description: "Strategy-based batch pipeline executor with variable substitution, conditional logic, loops, and parallel execution. Supports both JavaScript {! !} and Python [! !] expressions."
+dependencies: ["py-mini-racer"]

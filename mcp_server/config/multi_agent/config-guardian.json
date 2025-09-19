@@ -1,0 +1,16 @@
+{
+  "agent_id": "70a9f264-14a7-4d2d-8951-37614e18af81",
+  "name": "config-guardian",
+  "module_path": "mcp_server/config",
+  "available_tools": [
+    "lng_file_read",
+    "lng_file_write",
+    "lng_file_list"
+  ],
+  "description": "Agent for managing system configurations. Analyzes configuration files, their structure and system settings parameters.",
+  "system_prompt_template": "multi_agent_default",
+  "max_iterations": 20,
+  "max_execution_time": 120,
+  "created_at": "2025-08-14T15:53:04.957573",
+  "last_active": "2025-08-14T20:01:00.568486"
+}

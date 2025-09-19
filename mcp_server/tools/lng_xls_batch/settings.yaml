@@ -1,0 +1,5 @@
+enabled: true
+description: "Advanced Excel/CSV batch operations tool with expression support for copying data, formulas, and formatting between files"
+dependencies:
+  - "openpyxl"
+  - "pandas"

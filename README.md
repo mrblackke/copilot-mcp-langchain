@@ -16,18 +16,29 @@ Instruction files are not always deterministic - they need to be fine-tuned when
 
 This project demonstrates a solution through:
 
-1. `Python` scripts installed on the local machine
+1. `Python` scripts installed on the local machine.
 2. Custom `MCP` server configuration through `.vscode/mcp.json`
 3. Custom tools defined in the `mcp_server/tools directory`
 
 With this setup, `GitHub Copilot` gains access to new, well-documented tools that it can see as part of your project. When you ask Copilot to "create a tool that does X", it can generate a solution very close to what you need. You simply accept its changes and restart MCP to get a new deterministic tool for your specific logic.
 
+## Data Security
+
+⚠️ **Important**: Please review the [Security Disclaimer](security-disclaimer.md) before using this tool in production environments.
+
+This document outlines potential data leak scenarios and provides guidance on risk mitigation when working with this tool. 
+
 ## Key Components
 
-- **Simple Examples**: Demonstrates integration with different LLM providers
-  - `simple_openai.py` - OpenAI integration
-  - `simple_azure.py` - Azure OpenAI integration
-  - `simple_both.py` - Flexible approach to switch between providers
+- **Simple Examples** (`mcp_server/simple/`): Demonstrates integration with different LLM providers and key LangChain concepts
+  - `query_openai.py` - OpenAI integration
+  - `query_azure.py` - Azure OpenAI integration  
+  - `prompt_template.py` - Prompt template management and usage
+  - `rag.py` - Retrieval-Augmented Generation (RAG) with vector search
+  - `agent.py` - AI Agent with specialized tools (character counting, MD5 hashing, regex matching)
+  - `structured_output.py` - Structured data extraction in multiple formats (JSON, YAML, Markdown)
+  - `chain_of_thought.py` - Step-by-step problem solving with transparent reasoning
+  - `color.py` - Helper module for colored terminal output
 
 - **MCP Implementation**:
   - `mcp_server/test/server.py` - Client implementation for testing
@@ -52,14 +63,15 @@ With this setup, `GitHub Copilot` gains access to new, well-documented tools tha
   ```
 
 - **Custom Langchain Tools**:
+  - `lng_batch_run` - advanced pipeline execution with conditionals, loops, and parallel processing
   - `lng_count_words` - word counting, demonstrates python function calling
   - `lng_get_tools_info` - tools information retrieval, collects all the information about tools in one place, that helps in `Github Copilot`.
-  - `lng_rag_add_data` and `lng_rag_search` - demonstrates RAG (Retrieval Augmented Generation) functionality 
-  - `lng_save_prompt_template` and `lng_use_prompt_template` - demonstrates Prompt template management
-  - `lng_run_chain` - demostrates Chain execution 
-  - `lng_agent_demo` - demonstrates Agent functionality
-  - `lng_structured_output` - demonstrates Structured output
-  - `lng_chain_of_thought` - demonstrates Chain of Thought reasoning approach with Memory usage
+  - `lng_llm_rag_add_data` and `lng_rag_search` - demonstrates RAG (Retrieval Augmented Generation) functionality 
+  - `lng_llm_prompt_template` - unified prompt template management with file storage (save, use, list)
+  - `lng_llm_run_chain` - demostrates Chain execution 
+  - `lng_llm_agent_demo` - demonstrates Agent functionality
+  - `lng_llm_structured_output` - demonstrates Structured output
+  - `lng_llm_chain_of_thought` - demonstrates Chain of Thought reasoning approach with Memory usage
   - And more in `mcp_server/tools/`
 
 ## Running tools in terminal

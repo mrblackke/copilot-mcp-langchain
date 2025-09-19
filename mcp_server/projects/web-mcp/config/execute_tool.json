@@ -1,0 +1,33 @@
+{
+  "name": "execution-api",
+  "port": 8081,
+  "path": "/execute",
+  "bind_host": "localhost", 
+  "thread_mode": true,
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization"
+    },
+    "body": {
+      "success": true,
+      "tool": "{! webhook.body.tool || 'unknown' !}",
+      "method": "{! webhook.method !}",
+      "received_params": "{! JSON.stringify(webhook.body.params || {}) !}",
+      "tool_result": "{! JSON.stringify(tool_result || null) !}",
+      "pipeline_success": "{! pipeline.success !}",
+      "timestamp": "{! new Date().toISOString() !}",
+      "test": "With pipeline and tool_result"
+    }
+  },
+  "pipeline": [
+    {
+      "tool": "{! webhook.body.tool !}",
+      "params": "{! webhook.body.params !}",
+      "output": "tool_result"
+    }
+  ]
+}

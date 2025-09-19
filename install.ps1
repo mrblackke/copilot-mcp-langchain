@@ -27,6 +27,9 @@ function Eval-Echo {
 
 Eval-Echo "python --version"
 
+# updating pip 
+Eval-Echo "python -m pip install --upgrade pip"
+
 # create virtual environment
 Eval-Echo "pip install virtualenv"
 Eval-Echo "python -m virtualenv .virtualenv"
@@ -51,3 +54,6 @@ Eval-Echo "pip install fastapi uvicorn requests"
 # Tool-specific dependencies are now managed via `settings.yaml` files.
 # Run this to install dependencies for enabled tools:
 Eval-Echo "python -m mcp_server.run install_dependencies"
+
+# You can also install dependencies for specific tools only:
+# Eval-Echo "python -m mcp_server.run install_dependencies lng_email_client lng_http_client"
