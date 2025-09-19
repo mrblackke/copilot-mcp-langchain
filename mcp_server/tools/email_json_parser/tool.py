@@ -12,13 +12,15 @@ def build_llm_prompt(email: Dict[str, Any], user_prompt: str) -> str:
 # Асинхронный вызов LLM через MCP (универсальный интерфейс)
 async def call_llm(prompt: str) -> Optional[dict]:
     try:
-        from mcp_server.tools.lng_llm.agent_demo.tool import tool_lng_llm_agent_demo
-        response = await tool_lng_llm_agent_demo(prompt=prompt, temperature=0.0, max_tokens=512)
-        import re
-        import json as pyjson
-        match = re.search(r'\{[\s\S]*\}', str(response))
-        if match:
-            return pyjson.loads(match.group(0))
+        from mcp_server.tools.lng_llm.agent_demo.tool import run_tool
+        # Используем run_tool с нужными параметрами
+        response_list = await run_tool("agent_demo", {"input_text": prompt, "task": "Extract structured data from email"})
+        if response_list and hasattr(response_list[0], 'text'):
+            import re
+            import json as pyjson
+            match = re.search(r'\{[\s\S]*\}', response_list[0].text)
+            if match:
+                return pyjson.loads(match.group(0))
     except Exception as e:
         print(f"Ошибка LLM: {e}")
     return None
