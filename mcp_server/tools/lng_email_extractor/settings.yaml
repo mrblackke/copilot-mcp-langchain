@@ -6,3 +6,32 @@ dependencies:
   - json
   - datetime
   - python-dotenv
+  - pyyaml
+
+# Ключевые слова для фильтрации тем писем
+subject_keywords:
+  - "Order Confirmation"
+  - "Your cult beauty order"
+  - "Twoje zamówienie"
+
+
+# Отправители для фильтрации
+sender_keywords:
+  - "flaconi"
+  - "cult beauty"
+  - "sephora"
+  - "douglas"
+  - "spaceNK"
+  - "notino"
+  - "Lookfantastic"
+  - "cosibella"
+  - "Tilbury"
+  - "Dior"
+  
+# Настройки по умолчанию
+defaults:
+  days_back: 7
+  max_emails: 50
+  only_unread: true
+  use_subject_keywords: true  # Использовать ли ключевые слова из этого файла
+  use_sender_keywords: false  # Использовать ли отправителей из этого файла

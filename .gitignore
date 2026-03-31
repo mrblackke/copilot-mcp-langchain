@@ -8,6 +8,8 @@ __pycache__
 # Ignore email extraction results
 extracted_emails/*.json
 emails_json/*.json
+extracted_data/
+parsed_orders/
 
 # Ignore system files
 .DS_Store
