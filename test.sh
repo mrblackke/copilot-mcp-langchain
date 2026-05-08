@@ -764,6 +764,41 @@ python -m mcp_server.run run lng_xls_batch '{\"workspace\":{\"csv_file\":\"work/
 
 echo "=== lng_xls_batch Tests Completed ==="
 
+###########################
+### lng_jira_sso_auth   ###
+###########################
+# 1. Interactive login (default): opens Chromium, fill credentials, complete MFA manually
+python -m mcp_server.run run lng_jira_sso_auth '{}'
+
+# 2. With explicit credentials (still headed — user handles MFA if needed)
+python -m mcp_server.run run lng_jira_sso_auth '{\"username\": \"your@epam.com\", \"password\": \"yourpassword\"}'
+
+# 3. Fully automated headless login (requires TOTP secret from Microsoft Authenticator)
+python -m mcp_server.run run lng_jira_sso_auth '{\"headless\": true, \"totp_secret\": \"BASE32SECRET\"}'
+
+# 4. Check if existing session is valid (skip browser if still active)
+python -m mcp_server.run run lng_jira_sso_auth '{\"check_existing\": true}'
+
+echo "=== lng_jira_sso_auth Tests Completed ==="
+
+##############################
+### lng_jira_worklog_report ##
+##############################
+# Last 6 closed sprints + active sprint (default)
+python -m mcp_server.run run lng_jira_worklog_report '{\"project\": \"PROJ\"}'
+
+# Active sprint only — quick current state check
+python -m mcp_server.run run lng_jira_worklog_report '{\"project\": \"PROJ\", \"sprint_state\": \"active\"}'
+
+# Last 3 closed sprints — ~6 weeks capacity
+python -m mcp_server.run run lng_jira_worklog_report '{\"project\": \"PROJ\", \"last_n_sprints\": 3}'
+
+# Specific sprint by name substring
+python -m mcp_server.run run lng_jira_worklog_report '{\"project\": \"PROJ\", \"sprint_name\": \"Sprint 15\"}'
+
+# Save full report to JSON file
+python -m mcp_server.run run lng_jira_worklog_report '{\"project\": \"PROJ\", \"output_file\": \"worklog_report.json\"}'
+
 ########################
 ### clean all caches ###
 ########################

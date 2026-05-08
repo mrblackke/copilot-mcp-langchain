@@ -57,3 +57,6 @@ Eval-Echo "python -m mcp_server.run install_dependencies"
 
 # You can also install dependencies for specific tools only:
 # Eval-Echo "python -m mcp_server.run install_dependencies lng_email_client lng_http_client"
+
+# Install Playwright browser binaries (used by lng_jira_sso_auth for Microsoft SSO login)
+Eval-Echo "playwright install chromium"

@@ -19,7 +19,7 @@ def llm(callbacks=None, verbose=False, **kwargs):
         logger.info(f"Using Azure OpenAI LLM: {AZURE_OPENAI_API_DEPLOYMENT} at {AZURE_OPENAI_ENDPOINT} with API version {AZURE_OPENAI_API_VERSION}.")
         return AzureChatOpenAI(
             azure_deployment=AZURE_OPENAI_API_DEPLOYMENT,
-            model=AZURE_OPENAI_API_VERSION,
+            model=AZURE_OPENAI_API_DEPLOYMENT,
             api_version=AZURE_OPENAI_API_VERSION,
             api_key=AZURE_OPENAI_API_KEY,
             max_tokens=1000,

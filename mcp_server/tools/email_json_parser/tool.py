@@ -9,18 +9,18 @@ def build_llm_prompt(email: Dict[str, Any], user_prompt: str) -> str:
     return f"""
 {user_prompt}\n\n### Email Metadata:\n- From: {email.get('from', 'unknown')}\n- Subject: {email.get('subject', 'unknown')}\n- Date: {email.get('date', 'unknown')}\n\n### Email Body:\n{email.get('body', '')}\n\n### Response Format (JSON only):\n"""
 
-# Асинхронный вызов LLM через MCP (универсальный интерфейс)
+# Асинхронный вызов LLM напрямую
 async def call_llm(prompt: str) -> Optional[dict]:
     try:
-        from mcp_server.tools.lng_llm.agent_demo.tool import run_tool
-        # Используем run_tool с нужными параметрами
-        response_list = await run_tool("agent_demo", {"input_text": prompt, "task": "Extract structured data from email"})
-        if response_list and hasattr(response_list[0], 'text'):
-            import re
-            import json as pyjson
-            match = re.search(r'\{[\s\S]*\}', response_list[0].text)
-            if match:
-                return pyjson.loads(match.group(0))
+        import re
+        import json as pyjson
+        from mcp_server.llm import llm
+        model = llm()
+        response = await model.ainvoke(prompt)
+        text = response.content if hasattr(response, 'content') else str(response)
+        match = re.search(r'\{[\s\S]*\}', text)
+        if match:
+            return pyjson.loads(match.group(0))
     except Exception as e:
         print(f"Ошибка LLM: {e}")
     return None
@@ -34,7 +34,14 @@ async def extract_orders_from_json(json_dir: str, user_prompt: str) -> List[Dict
             try:
                 with open(fpath, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    for email in data.get('emails', []):
+                    emails_data = data.get('emails', [])
+                    if isinstance(emails_data, dict) and 'emails' in emails_data:
+                        emails_list = emails_data['emails']
+                    elif isinstance(emails_data, list):
+                        emails_list = emails_data
+                    else:
+                        emails_list = []
+                    for email in emails_list:
                         prompt = build_llm_prompt(email, user_prompt)
                         llm_result = await call_llm(prompt)
                         if llm_result:
@@ -74,18 +81,18 @@ DEFAULT_PROMPT = (
     "}\n"
 )
 
-def tool_email_json_parser(prompt: str = None, json_dir: str = None) -> str:
+async def tool_email_json_parser(prompt: str = None, json_dir: str = None) -> str:
     """
     MCP tool: фильтрация и выгрузка информации из email JSON по промту (LLM).
     """
     if prompt is None:
         prompt = DEFAULT_PROMPT
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     if not json_dir:
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
         json_dir = os.path.join(base_dir, 'extracted_emails')
     if not os.path.exists(json_dir):
         return f"❌ Папка {json_dir} не найдена."
-    results = asyncio.run(extract_orders_from_json(json_dir, prompt))
+    results = await extract_orders_from_json(json_dir, prompt)
     if not results:
         return f"❌ Не найдено заказов по промту: {prompt}"
     # Сохраняем структурированные данные в папку parsed_orders
@@ -117,9 +124,9 @@ tool_info = lambda: {
 async def run_tool(name: str, parameters: dict) -> list[types.Content]:
     prompt = parameters.get("prompt")
     json_dir = parameters.get("json_dir")
-    result = tool_email_json_parser(prompt, json_dir)
+    result = await tool_email_json_parser(prompt, json_dir)
     return [types.TextContent(type="text", text=result)]
 
 if __name__ == "__main__":
     prompt = input("Введите промт/ключевое слово: ")
-    print(tool_email_json_parser(prompt))
+    print(asyncio.run(tool_email_json_parser(prompt)))
