@@ -1,7 +1,6 @@
 {
-    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-    "chat.mcp.access": "all",
     "chat.mcp.enabled": true,
+    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
     "chat.agent.maxRequests": 250,
     // "chat.tools.terminal.autoApprove": {
     //     "git": false,
@@ -40,14 +39,14 @@
             "path": "bash",
             "args": [
                 "-c",
-                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.sh' ]; then source './mcp_server/virtualenv/autofix_encoding.sh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\033[32mVirtual environment activated automatically!\033[0m'; else echo -e '\033[33mVirtual environment not found\033[0m'; fi && exec bash"
+                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.sh' ]; then source './mcp_server/virtualenv/autofix_encoding.sh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\\033[32mVirtual environment activated automatically!\\033[0m'; else echo -e '\\033[33mVirtual environment not found\\033[0m'; fi && exec bash"
             ]
         },
         "zsh": {
             "path": "zsh",
             "args": [
                 "-c",
-                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.zsh' ]; then source './mcp_server/virtualenv/autofix_encoding.zsh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\033[32mVirtual environment activated automatically!\033[0m'; else echo -e '\033[33mVirtual environment not found\033[0m'; fi && exec zsh"
+                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.zsh' ]; then source './mcp_server/virtualenv/autofix_encoding.zsh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\\033[32mVirtual environment activated automatically!\\033[0m'; else echo -e '\\033[33mVirtual environment not found\\033[0m'; fi && exec zsh"
             ]
         }
     },
@@ -56,19 +55,18 @@
             "path": "bash",
             "args": [
                 "-c",
-                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.sh' ]; then source './mcp_server/virtualenv/autofix_encoding.sh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\033[32mVirtual environment activated automatically!\033[0m'; else echo -e '\033[33mVirtual environment not found\033[0m'; fi && exec bash"
+                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.sh' ]; then source './mcp_server/virtualenv/autofix_encoding.sh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\\033[32mVirtual environment activated automatically!\\033[0m'; else echo -e '\\033[33mVirtual environment not found\\033[0m'; fi && exec bash"
             ]
         },
         "zsh": {
             "path": "zsh",
             "args": [
                 "-c",
-                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.zsh' ]; then source './mcp_server/virtualenv/autofix_encoding.zsh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\033[32mVirtual environment activated automatically!\033[0m'; else echo -e '\033[33mVirtual environment not found\033[0m'; fi && exec zsh"
+                "cd '${workspaceFolder}' && if [ -f './mcp_server/virtualenv/autofix_encoding.zsh' ]; then source './mcp_server/virtualenv/autofix_encoding.zsh'; fi && if [ -f './.virtualenv/bin/activate' ]; then source './.virtualenv/bin/activate' && echo -e '\\033[32mVirtual environment activated automatically!\\033[0m'; else echo -e '\\033[33mVirtual environment not found\\033[0m'; fi && exec zsh"
             ]
         }
     },
     "terminal.integrated.defaultProfile.windows": "PowerShell",
     "terminal.integrated.defaultProfile.linux": "bash",
     "terminal.integrated.defaultProfile.osx": "zsh"
-}
 }

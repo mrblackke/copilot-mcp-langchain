@@ -1,22 +1,2 @@
-__pycache__
-.virtualenv/
-
-# Ignore environment and secrets
-.env
-*.env
-
-# Ignore email extraction results
-extracted_emails/*.json
-emails_json/*.json
-extracted_data/
-parsed_orders/
-
-# Ignore system files
-.DS_Store
-
-# Ignore test and temp scripts (optional)
-scripts/
-PY_local_script/
-
-mcp_server/logs/mcp_server.log
 work
+.env

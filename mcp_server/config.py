@@ -1,11 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-# Load .env from project root
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-env_path = os.path.join(project_root, '.env')
-load_dotenv(env_path)
-
+load_dotenv()
 
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "azure")
 if LLM_PROVIDER not in ["openai", "azure"]:
@@ -26,11 +22,3 @@ if AZURE_OPENAI_API_KEY is None or \
    AZURE_OPENAI_API_DEPLOYMENT is None or \
     AZURE_OPENAI_API_EMBEDDING_DEPLOYMENT is None:
     raise ValueError("One or more Azure OpenAI environment variables not found in .env")
-
-# Email Configuration
-GMAIL_EMAIL = os.getenv("GMAIL_EMAIL")
-GMAIL_PASSWORD = os.getenv("GMAIL_PASSWORD")
-MAILRU_EMAIL_1 = os.getenv("MAILRU_EMAIL_1")
-MAILRU_PASSWORD_1 = os.getenv("MAILRU_PASSWORD_1")
-MAILRU_EMAIL_2 = os.getenv("MAILRU_EMAIL_2")
-MAILRU_PASSWORD_2 = os.getenv("MAILRU_PASSWORD_2")
