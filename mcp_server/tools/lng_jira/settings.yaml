@@ -1,3 +1,3 @@
 enabled: true
 description: "Jira integration tools - retrieve ticket info, download/upload attachments, authenticate via Microsoft SSO, and analyze sprint worklogs with FE/BE/QA/BA role breakdown and capacity reporting"
-dependencies: ["requests", "python-dotenv", "playwright", "pyotp"]
+dependencies: ["requests", "python-dotenv", "playwright", "pyotp", "openpyxl"]
